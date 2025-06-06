@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { MessageCircle, ArrowUpRight, Send } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 interface Message {
   id: string
@@ -15,7 +16,7 @@ export default function Portfolio() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: "Ask me anything about my design work, process, or experience.",
+      content: "Hi! I'm Yi's AI assistant. Ask me anything about their design work, process, or experience.",
       isUser: false,
       timestamp: new Date()
     }
@@ -37,29 +38,30 @@ export default function Portfolio() {
     {
       id: 1,
       title: "NEXUS",
-      category: "E-COMMERCE",
+      category: "E-COMMERCE PLATFORM",
       year: "2024",
-      impact: "40% CVR increase"
+      impact: "+40% CVR"
     },
     {
       id: 2,
       title: "NEURAL",
-      category: "SAAS PLATFORM",
-      year: "2024",
-      impact: "500K+ users"
+      category: "B2B SAAS PRODUCT",
+      year: "2023",
+      impact: "500K+ USERS"
     },
     {
       id: 3,
       title: "FLUX",
       category: "BRAND SYSTEM",
       year: "2023",
-      impact: "Global launch"
+      impact: "GLOBAL LAUNCH"
     }
   ]
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!inputMessage.trim()) return
+    
+    if (!inputMessage.trim() || isLoading) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -78,7 +80,10 @@ export default function Portfolio() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: inputMessage }),
+        body: JSON.stringify({
+          message: inputMessage,
+          previousMessages: messages
+        }),
       })
 
       if (!response.ok) {
@@ -89,13 +94,13 @@ export default function Portfolio() {
       
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: data.response,
+        content: data.message || "I'd be happy to help! Could you please rephrase your question?",
         isUser: false,
         timestamp: new Date()
       }
       
       setMessages(prev => [...prev, aiResponse])
-    } catch (error) {
+    } catch {
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
         content: "System temporarily unavailable.",
@@ -200,7 +205,7 @@ export default function Portfolio() {
             >
               <div className="space-y-8">
                 <div>
-                  <h4 className="text-3xl font-bold mb-2">LET'S WORK</h4>
+                  <h4 className="text-3xl font-bold mb-2">LET&apos;S WORK</h4>
                   <p className="text-gray-400 text-xl">hello@yourname.com</p>
                 </div>
                 <div>
@@ -257,10 +262,12 @@ export default function Portfolio() {
                     >
                       {/* Avatar for AI responses */}
                       {!message.isUser && (
-                        <img 
+                        <Image 
                           src="/your-photo.png" 
                           alt="Yi Cui" 
-                          className="w-10 h-10 rounded-full object-cover flex-shrink-0 mt-1"
+                          width={40}
+                          height={40}
+                          className="rounded-full object-cover flex-shrink-0 mt-1"
                         />
                       )}
                       
@@ -283,10 +290,12 @@ export default function Portfolio() {
                     animate={{ opacity: 1 }}
                     className="flex gap-3 justify-start"
                   >
-                    <img 
+                    <Image 
                       src="/your-photo.png" 
                       alt="Yi Cui" 
-                      className="w-10 h-10 rounded-full object-cover flex-shrink-0 mt-1"
+                      width={40}
+                      height={40}
+                      className="rounded-full object-cover flex-shrink-0 mt-1"
                     />
                     <div className="bg-gray-800 p-3 rounded-2xl">
                       <div className="flex space-x-2">
