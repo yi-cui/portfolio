@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
 
     // Add previous messages for context
     if (previousMessages && Array.isArray(previousMessages)) {
-      previousMessages.slice(-5).forEach((msg: any) => { // Keep only last 5 messages for context
+      previousMessages.slice(-5).forEach((msg: { isUser: boolean; content: string }) => { // Keep only last 5 messages for context
         messages.push({
           role: msg.isUser ? "user" : "assistant",
           content: msg.content
