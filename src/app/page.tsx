@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { MessageCircle, ArrowUpRight, Send, ChevronDown, ChevronUp } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import Head from 'next/head'
 
 interface Message {
   id: string
@@ -117,10 +116,6 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-      </Head>
-      
       {/* Desktop Layout */}
       <div className="hidden lg:flex lg:max-w-7xl lg:mx-auto lg:px-8 lg:py-16 lg:h-screen">
         <div className="grid grid-cols-5 gap-16 w-full">
@@ -338,15 +333,15 @@ export default function Portfolio() {
         </div>
       </div>
 
-      {/* Mobile Layout - ChatGPT Style */}
-      <div className="lg:hidden h-screen flex flex-col">
+      {/* Mobile Layout - ChatGPT Style with Fixed Positioning */}
+      <div className="lg:hidden">
         
-        {/* Mobile Header - Fixed */}
+        {/* Mobile Header - Fixed to Top */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex-shrink-0 p-4 border-b border-gray-800 bg-black"
+          className="fixed top-0 left-0 right-0 z-10 p-4 border-b border-gray-800 bg-black"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -410,90 +405,92 @@ export default function Portfolio() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Mobile Chat Area - Flexible */}
-        <div className="flex-1 flex flex-col min-h-0">
-          
-          {/* Messages - Scrollable */}
-          <div className="flex-1 overflow-y-auto p-3 space-y-4" style={{ minHeight: 0 }}>
-            <AnimatePresence>
-              {messages.map((message) => (
-                <motion.div
-                  key={message.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className={`flex gap-2 ${message.isUser ? 'justify-end' : 'justify-start'}`}
-                >
-                  {!message.isUser && (
-                    <Image
-                      src="/your-photo.png" 
-                      alt="Yi Cui" 
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-1"
-                    />
-                  )}
-                  
-                  <div
-                    className={`max-w-[80%] p-3 text-sm rounded-2xl ${
-                      message.isUser
-                        ? 'bg-gray-500 text-gray-100'
-                        : 'bg-gray-800 text-gray-100'
-                    }`}
-                  >
-                    {message.content}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-            
-            {isLoading && (
+        {/* Messages - Scrollable with Fixed Header/Footer Space */}
+        <div 
+          className="fixed top-0 left-0 right-0 bottom-0 overflow-y-auto p-3 space-y-4"
+          style={{ 
+            paddingTop: showProjects ? '280px' : '120px', 
+            paddingBottom: '80px' 
+          }}
+        >
+          <AnimatePresence>
+            {messages.map((message) => (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex gap-2 justify-start"
+                key={message.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className={`flex gap-2 ${message.isUser ? 'justify-end' : 'justify-start'}`}
               >
-                <Image
-                  src="/your-photo.png" 
-                  alt="Yi Cui" 
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-1"
-                />
-                <div className="bg-gray-800 p-3 rounded-2xl">
-                  <div className="flex space-x-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                  </div>
+                {!message.isUser && (
+                  <Image 
+                    src="/your-photo.png" 
+                    alt="Yi Cui" 
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-1"
+                  />
+                )}
+                
+                <div
+                  className={`max-w-[80%] p-3 text-sm rounded-2xl ${
+                    message.isUser
+                      ? 'bg-gray-500 text-gray-100'
+                      : 'bg-gray-800 text-gray-100'
+                  }`}
+                >
+                  {message.content}
                 </div>
               </motion.div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input - Fixed at Bottom */}
-          <div className="flex-shrink-0 p-3 border-t border-gray-800 bg-black">
-            <form onSubmit={handleSendMessage} className="flex items-center gap-2 bg-gray-900 rounded-full px-3 py-2">
-              <input
-                type="text"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Ask about my design process..."
-                className="flex-1 bg-transparent text-sm placeholder-gray-500 focus:outline-none text-white"
+            ))}
+          </AnimatePresence>
+          
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex gap-2 justify-start"
+            >
+              <Image 
+                src="/your-photo.png" 
+                alt="Yi Cui" 
+                width={32}
+                height={32}
+                className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-1"
               />
-              <button
-                type="submit"
-                disabled={!inputMessage.trim() || isLoading}
-                className="bg-white text-black rounded-full p-2 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              >
-                <Send className="w-3 h-3" />
-              </button>
-            </form>
-          </div>
+              <div className="bg-gray-800 p-3 rounded-2xl">
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
 
-        {/* Mobile Footer */}
+        {/* Input - Fixed to Bottom */}
+        <div className="fixed bottom-4 left-4 right-4 z-10">
+          <form onSubmit={handleSendMessage} className="flex items-center gap-2 bg-gray-900 rounded-full px-3 py-2 shadow-lg">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Ask about my design process..."
+              className="flex-1 bg-transparent text-sm placeholder-gray-500 focus:outline-none text-white"
+            />
+            <button
+              type="submit"
+              disabled={!inputMessage.trim() || isLoading}
+              className="bg-white text-black rounded-full p-2 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              <Send className="w-3 h-3" />
+            </button>
+          </form>
+        </div>
+
+        {/* Hidden Footer - No longer needed */}
         <div className="hidden flex-shrink-0 p-3 border-t border-gray-800 bg-black">
           <div className="flex justify-between items-center text-xs text-gray-400">
             <span>hello@yourname.com</span>

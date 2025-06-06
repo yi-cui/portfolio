@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Portfolio - Product Designer",
-  description: "Modern portfolio with AI chat assistant",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover",
+  title: "Yi Cui - Product Designer",
+  description: "Product Designer crafting digital experiences that matter. Bold. Minimal. Impactful.",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
 };
 
 export default function RootLayout({
