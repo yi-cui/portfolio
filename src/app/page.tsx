@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { MessageCircle, ArrowUpRight, Send, ChevronDown, ChevronUp } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import Head from 'next/head'
 
 interface Message {
   id: string
@@ -116,6 +117,10 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-black text-white">
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+      </Head>
+      
       {/* Desktop Layout */}
       <div className="hidden lg:flex lg:max-w-7xl lg:mx-auto lg:px-8 lg:py-16 lg:h-screen">
         <div className="grid grid-cols-5 gap-16 w-full">
@@ -290,7 +295,7 @@ export default function Portfolio() {
                     animate={{ opacity: 1 }}
                     className="flex gap-3 justify-start"
                   >
-                    <Image 
+                    <Image
                       src="/your-photo.png" 
                       alt="Yi Cui" 
                       width={40}
@@ -408,17 +413,6 @@ export default function Portfolio() {
         {/* Mobile Chat Area - Flexible */}
         <div className="flex-1 flex flex-col min-h-0">
           
-          {/* Chat Header */}
-          <div className="flex-shrink-0 p-3 border-b border-gray-800 bg-gray-950/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4" />
-                <h3 className="text-sm font-bold">Chat with my AI agent</h3>
-              </div>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-
           {/* Messages - Scrollable */}
           <div className="flex-1 overflow-y-auto p-3 space-y-4" style={{ minHeight: 0 }}>
             <AnimatePresence>
@@ -431,7 +425,7 @@ export default function Portfolio() {
                   className={`flex gap-2 ${message.isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   {!message.isUser && (
-                    <Image 
+                    <Image
                       src="/your-photo.png" 
                       alt="Yi Cui" 
                       width={32}
@@ -459,7 +453,7 @@ export default function Portfolio() {
                 animate={{ opacity: 1 }}
                 className="flex gap-2 justify-start"
               >
-                <Image 
+                <Image
                   src="/your-photo.png" 
                   alt="Yi Cui" 
                   width={32}
@@ -500,7 +494,7 @@ export default function Portfolio() {
         </div>
 
         {/* Mobile Footer */}
-        <div className="flex-shrink-0 p-3 border-t border-gray-800 bg-black">
+        <div className="hidden flex-shrink-0 p-3 border-t border-gray-800 bg-black">
           <div className="flex justify-between items-center text-xs text-gray-400">
             <span>hello@yourname.com</span>
             <span>San Francisco</span>
