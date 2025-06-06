@@ -116,7 +116,7 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="h-screen flex flex-col lg:max-w-7xl lg:mx-auto lg:px-8 lg:py-16">
+      <div className="h-screen h-[100dvh] flex flex-col lg:max-w-7xl lg:mx-auto lg:px-8 lg:py-16">
         
         {/* Mobile-First Layout */}
         <div className="flex-1 flex flex-col lg:grid lg:grid-cols-5 lg:gap-16">
