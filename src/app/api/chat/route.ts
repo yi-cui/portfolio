@@ -53,7 +53,7 @@ If asked about specific project details, focus on the design process, challenges
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json()
+    const { message, previousMessages } = await request.json()
 
     if (!message) {
       return NextResponse.json(
@@ -69,25 +69,40 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Build conversation history with proper typing
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      {
+        role: "system",
+        content: PORTFOLIO_CONTEXT
+      }
+    ]
+
+    // Add previous messages for context
+    if (previousMessages && Array.isArray(previousMessages)) {
+      previousMessages.slice(-5).forEach((msg: any) => { // Keep only last 5 messages for context
+        messages.push({
+          role: msg.isUser ? "user" : "assistant",
+          content: msg.content
+        })
+      })
+    }
+
+    // Add current message
+    messages.push({
+      role: "user",
+      content: message
+    })
+
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: PORTFOLIO_CONTEXT
-        },
-        {
-          role: "user",
-          content: message
-        }
-      ],
+      messages: messages,
       max_tokens: 300,
       temperature: 0.7,
     })
 
     const aiResponse = completion.choices[0]?.message?.content || "I'm sorry, I couldn't process that request."
 
-    return NextResponse.json({ response: aiResponse })
+    return NextResponse.json({ message: aiResponse })
 
   } catch (error) {
     console.error('OpenAI API error:', error)
