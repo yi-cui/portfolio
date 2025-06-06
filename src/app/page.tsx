@@ -267,7 +267,7 @@ export default function Portfolio() {
                           alt="Yi Cui" 
                           width={40}
                           height={40}
-                          className="rounded-full object-cover flex-shrink-0 mt-1"
+                          className="w-10 h-10 rounded-full object-cover flex-shrink-0 mt-1"
                         />
                       )}
                       
@@ -295,7 +295,7 @@ export default function Portfolio() {
                       alt="Yi Cui" 
                       width={40}
                       height={40}
-                      className="rounded-full object-cover flex-shrink-0 mt-1"
+                      className="w-10 h-10 rounded-full object-cover flex-shrink-0 mt-1"
                     />
                     <div className="bg-gray-800 p-3 rounded-2xl">
                       <div className="flex space-x-2">
