@@ -129,7 +129,7 @@ export default function Portfolio() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="p-4 border-b border-gray-800 lg:border-0 lg:p-0 lg:mb-16"
+              className="flex-shrink-0 p-4 border-b border-gray-800 lg:border-0 lg:p-0 lg:mb-16"
             >
               {/* Mobile Header */}
               <div className="block lg:hidden">
@@ -285,130 +285,132 @@ export default function Portfolio() {
             </motion.div>
           </div>
 
-          {/* Chat Section - Mobile Priority */}
+          {/* Chat Section - Mobile Priority with Fixed Height */}
           <motion.div 
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex-1 flex flex-col lg:col-span-3 lg:h-[calc(100vh-8rem)] p-4 lg:p-0"
+            className="flex-1 flex flex-col lg:col-span-3 lg:h-[calc(100vh-8rem)]"
           >
-            <div className="border border-gray-800 bg-gray-950/50 rounded-lg flex flex-col h-full min-h-[60vh] lg:min-h-full">
-              
-              {/* Chat Header - Optimized for Mobile */}
-              <div className="flex-shrink-0">
-                <div className="p-3 lg:p-4 border-b border-gray-800 relative">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-center gap-2 lg:gap-3 mb-1">
-                        <MessageCircle className="w-4 h-4 lg:w-5 lg:h-5" />
-                        <h3 className="text-base lg:text-lg font-bold">Chat with my AI agent</h3>
+            <div className="flex flex-col h-full m-4 lg:m-0">
+              <div className="border border-gray-800 bg-gray-950/50 rounded-lg flex flex-col flex-1">
+                
+                {/* Chat Header - Optimized for Mobile */}
+                <div className="flex-shrink-0">
+                  <div className="p-3 lg:p-4 border-b border-gray-800 relative">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 lg:gap-3 mb-1">
+                          <MessageCircle className="w-4 h-4 lg:w-5 lg:h-5" />
+                          <h3 className="text-base lg:text-lg font-bold">Chat with my AI agent</h3>
+                        </div>
+                        <p className="text-gray-400 text-xs lg:text-sm">
+                          Get instant answers about my design work & process
+                        </p>
                       </div>
-                      <p className="text-gray-400 text-xs lg:text-sm">
-                        Get instant answers about my design work & process
-                      </p>
-                    </div>
-                    <motion.div 
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.5 }}
-                      className="hidden lg:flex items-center gap-3"
-                    >
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <span className="font-bold text-sm tracking-wider text-white">AI ASSISTANT ONLINE</span>
-                    </motion.div>
-                    {/* Mobile Status Indicator */}
-                    <div className="lg:hidden">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <motion.div 
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                        className="hidden lg:flex items-center gap-3"
+                      >
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="font-bold text-sm tracking-wider text-white">AI ASSISTANT ONLINE</span>
+                      </motion.div>
+                      {/* Mobile Status Indicator */}
+                      <div className="lg:hidden">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Messages - Mobile Optimized */}
-              <div className="flex-1 overflow-y-auto p-3 lg:p-6 space-y-4 lg:space-y-6">
-                <AnimatePresence>
-                  {messages.map((message) => (
-                    <motion.div
-                      key={message.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className={`flex gap-2 lg:gap-3 ${message.isUser ? 'justify-end' : 'justify-start'}`}
-                    >
-                      {/* Avatar for AI responses */}
-                      {!message.isUser && (
-                        <Image 
-                          src="/your-photo.png" 
-                          alt="Yi Cui" 
-                          width={32}
-                          height={32}
-                          className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover flex-shrink-0 mt-1"
-                        />
-                      )}
-                      
-                      <div
-                        className={`max-w-[75%] lg:max-w-sm p-3 text-sm rounded-2xl ${
-                          message.isUser
-                            ? 'bg-gray-500 text-gray-100'
-                            : 'bg-gray-800 text-gray-100'
-                        }`}
+                {/* Messages - Mobile Optimized with Proper Height */}
+                <div className="flex-1 overflow-y-auto p-3 lg:p-6 space-y-4 lg:space-y-6">
+                  <AnimatePresence>
+                    {messages.map((message) => (
+                      <motion.div
+                        key={message.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className={`flex gap-2 lg:gap-3 ${message.isUser ? 'justify-end' : 'justify-start'}`}
                       >
-                        {message.content}
+                        {/* Avatar for AI responses */}
+                        {!message.isUser && (
+                          <Image 
+                            src="/your-photo.png" 
+                            alt="Yi Cui" 
+                            width={32}
+                            height={32}
+                            className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover flex-shrink-0 mt-1"
+                          />
+                        )}
+                        
+                        <div
+                          className={`max-w-[75%] lg:max-w-sm p-3 text-sm rounded-2xl ${
+                            message.isUser
+                              ? 'bg-gray-500 text-gray-100'
+                              : 'bg-gray-800 text-gray-100'
+                          }`}
+                        >
+                          {message.content}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                  
+                  {isLoading && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="flex gap-2 lg:gap-3 justify-start"
+                    >
+                      <Image 
+                        src="/your-photo.png" 
+                        alt="Yi Cui" 
+                        width={32}
+                        height={32}
+                        className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover flex-shrink-0 mt-1"
+                      />
+                      <div className="bg-gray-800 p-3 rounded-2xl">
+                        <div className="flex space-x-2">
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                        </div>
                       </div>
                     </motion.div>
-                  ))}
-                </AnimatePresence>
-                
-                {isLoading && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex gap-2 lg:gap-3 justify-start"
-                  >
-                    <Image 
-                      src="/your-photo.png" 
-                      alt="Yi Cui" 
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover flex-shrink-0 mt-1"
-                    />
-                    <div className="bg-gray-800 p-3 rounded-2xl">
-                      <div className="flex space-x-2">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-                <div ref={messagesEndRef} />
-              </div>
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
 
-              {/* Input - Mobile Optimized */}
-              <div className="p-3 lg:p-6 flex-shrink-0">
-                <form onSubmit={handleSendMessage} className="flex items-center gap-2 lg:gap-3 bg-gray-900 rounded-full px-3 lg:px-4 py-2 lg:py-3">
-                  <input
-                    type="text"
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    placeholder="Ask about my design process..."
-                    className="flex-1 bg-transparent text-sm placeholder-gray-500 focus:outline-none text-white"
-                  />
-                  <button
-                    type="submit"
-                    disabled={!inputMessage.trim() || isLoading}
-                    className="bg-white text-black rounded-full p-2 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                  >
-                    <Send className="w-3 h-3 lg:w-4 lg:h-4" />
-                  </button>
-                </form>
+                {/* Input - Mobile Optimized and Always Visible */}
+                <div className="flex-shrink-0 p-3 lg:p-6">
+                  <form onSubmit={handleSendMessage} className="flex items-center gap-2 lg:gap-3 bg-gray-900 rounded-full px-3 lg:px-4 py-2 lg:py-3">
+                    <input
+                      type="text"
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      placeholder="Ask about my design process..."
+                      className="flex-1 bg-transparent text-sm placeholder-gray-500 focus:outline-none text-white"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!inputMessage.trim() || isLoading}
+                      className="bg-white text-black rounded-full p-2 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    >
+                      <Send className="w-3 h-3 lg:w-4 lg:h-4" />
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
 
         {/* Mobile Only: Bottom Contact Info */}
-        <div className="lg:hidden p-4 border-t border-gray-800 bg-black">
+        <div className="lg:hidden flex-shrink-0 p-4 border-t border-gray-800 bg-black">
           <div className="flex justify-between items-center text-xs text-gray-400">
             <span>hello@yourname.com</span>
             <span>San Francisco</span>
