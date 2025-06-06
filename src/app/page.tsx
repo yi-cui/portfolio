@@ -116,10 +116,10 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="h-screen h-[100dvh] flex flex-col lg:max-w-7xl lg:mx-auto lg:px-8 lg:py-16">
+      <div className="h-screen lg:max-w-7xl lg:mx-auto lg:px-8 lg:py-16 flex flex-col">
         
         {/* Mobile-First Layout */}
-        <div className="flex-1 flex flex-col lg:grid lg:grid-cols-5 lg:gap-16">
+        <div className="flex-1 flex flex-col lg:grid lg:grid-cols-5 lg:gap-16 lg:h-[calc(100vh-8rem)]">
           
           {/* Mobile: Condensed Header + Desktop: Full Left Column */}
           <div className="lg:col-span-2 lg:overflow-y-auto lg:pr-4 lg:h-[calc(100vh-8rem)]">
@@ -285,15 +285,15 @@ export default function Portfolio() {
             </motion.div>
           </div>
 
-          {/* Chat Section - Mobile Priority with Fixed Height */}
+          {/* Chat Section - Mobile Priority with Explicit Height Control */}
           <motion.div 
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex-1 flex flex-col lg:col-span-3 lg:h-[calc(100vh-8rem)]"
+            className="flex-1 flex flex-col lg:col-span-3 min-h-0"
           >
             <div className="flex flex-col h-full m-4 lg:m-0">
-              <div className="border border-gray-800 bg-gray-950/50 rounded-lg flex flex-col flex-1">
+              <div className="border border-gray-800 bg-gray-950/50 rounded-lg flex flex-col" style={{ height: 'calc(100vh - 200px)' }}>
                 
                 {/* Chat Header - Optimized for Mobile */}
                 <div className="flex-shrink-0">
@@ -325,8 +325,8 @@ export default function Portfolio() {
                   </div>
                 </div>
 
-                {/* Messages - Mobile Optimized with Proper Height */}
-                <div className="flex-1 overflow-y-auto p-3 lg:p-6 space-y-4 lg:space-y-6">
+                {/* Messages - Mobile Optimized with Conservative Height */}
+                <div className="flex-1 overflow-y-auto p-3 lg:p-6 space-y-4 lg:space-y-6 min-h-0">
                   <AnimatePresence>
                     {messages.map((message) => (
                       <motion.div
