@@ -228,7 +228,7 @@ export default function Portfolio() {
                   <p className="text-gray-400 text-xl mb-3">ycui0801@gmail.com</p>
                   <div className="flex items-center justify-between">
                     <a 
-                      href="/resume.pdf" 
+                      href="https://drive.google.com/file/d/1HGYczYPueOVSvbDqJZ54py9vFBf_JynT/view?usp=sharing" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-white font-medium hover:text-gray-300 transition-colors text-lg"
@@ -238,7 +238,7 @@ export default function Portfolio() {
                     </a>
                     <div className="flex items-center gap-4">
                       <a 
-                        href="https://www.linkedin.com/in/yi-cui-a28579220/" 
+                        href="https://www.linkedin.com/in/yicui-designer/" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-white hover:text-gray-300 transition-colors"
