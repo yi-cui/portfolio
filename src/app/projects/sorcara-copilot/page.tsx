@@ -3,7 +3,7 @@
 import React from 'react'
 import { ArrowLeft, ArrowUpRight, Calendar, Users, Target } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
+
 
 export default function ServiceCapitalProject() {
   return (
@@ -238,7 +238,7 @@ export default function ServiceCapitalProject() {
             </h2>
             
             <p className="text-lg leading-relaxed text-gray-300 mb-12">
-              Our Smart RFQ Agent translates <span className="text-white font-semibold">everyday language</span> into <span className="text-white font-semibold">industry-specific terminology</span>. When users input vague descriptions like "cat scratcher," our <span className="text-white font-semibold">AI system</span> automatically generates precise specifications—<span className="text-white font-semibold">surface materials, dimensions, compliance requirements</span>—reducing sourcing time from <span className="text-white font-semibold">weeks to days</span>.
+              Our Smart RFQ Agent translates <span className="text-white font-semibold">everyday language</span> into <span className="text-white font-semibold">industry-specific terminology</span>. When users input vague descriptions like &quot;cat scratcher,&quot; our <span className="text-white font-semibold">AI system</span> automatically generates precise specifications—<span className="text-white font-semibold">surface materials, dimensions, compliance requirements</span>—reducing sourcing time from <span className="text-white font-semibold">weeks to days</span>.
             </p>
             
             {/* RFQ Interface Images */}
@@ -410,7 +410,7 @@ export default function ServiceCapitalProject() {
                 <h4 className="text-lg font-bold mb-4 text-white">01 Find White Label Products</h4>
                 <div className="border-l-4 border-gray-600 pl-4 mb-6">
                   <p className="text-gray-400 italic">
-                    <span className="font-semibold">Buyer Queries Example:</span> "A pet tracker for <span className="text-white font-semibold">small dogs (2kg - 5kg)</span>"
+                    <span className="font-semibold">Buyer Queries Example:</span> &quot;A pet tracker for <span className="text-white font-semibold">small dogs (2kg - 5kg)</span>&quot;
                   </p>
                 </div>
                 <div className="mb-6">
@@ -431,7 +431,7 @@ export default function ServiceCapitalProject() {
                 <h4 className="text-lg font-bold mb-4 text-white">02 Find Suppliers for Highly Customizable Products</h4>
                 <div className="border-l-4 border-gray-600 pl-4 mb-6">
                   <p className="text-gray-400 italic">
-                    <span className="font-semibold">Buyer Queries Example:</span> "I want to start a print-on-demand business for custom pet hoodies. I need a supplier who can print custom designs on hoodies for dogs of various sizes. I'm looking for high-quality, soft materials that are comfortable for pets."
+                    <span className="font-semibold">Buyer Queries Example:</span> &quot;I want to start a print-on-demand business for custom pet hoodies. I need a supplier who can print custom designs on hoodies for dogs of various sizes. I&apos;m looking for high-quality, soft materials that are comfortable for pets.&quot;
                   </p>
                 </div>
                 <div className="mb-6">
@@ -455,9 +455,9 @@ export default function ServiceCapitalProject() {
                     <span className="font-semibold">Buyer Queries Example:</span>
                   </p>
                   <ul className="text-gray-400 italic space-y-2 ml-4">
-                    <li>• "What are the regulations for using the term 'organic' on pet food labels in the US?"</li>
-                    <li>• "Help me research the most trendy features to source pet food"</li>
-                    <li>• "What is your recommendation on specifications for best selling pet clothes in winter?"</li>
+                    <li>• &quot;What are the regulations for using the term &apos;organic&apos; on pet food labels in the US?&quot;</li>
+                    <li>• &quot;Help me research the most trendy features to source pet food&quot;</li>
+                    <li>• &quot;What is your recommendation on specifications for best selling pet clothes in winter?&quot;</li>
                   </ul>
                 </div>
                 <div className="mb-6">

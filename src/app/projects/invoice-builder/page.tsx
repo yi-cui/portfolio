@@ -101,7 +101,7 @@ export default function InvoiceBuilderProject() {
               Dubsado is a CRM platform that empowers small businesses with streamlined workflows and efficient payment processes, handling over <span className="text-white font-semibold">$100 million</span> in transactions monthly across <span className="text-white font-semibold">50,000+ active users</span>.
             </p>
             <p className="text-xl leading-relaxed text-gray-300">
-              To increase revenue, we planned to launch our own payment processor. However, user complaints about the existing invoice builder's inefficiency posed a potential obstacle to adoption. I led the complete redesign to streamline the invoice creation process and maximize the revenue potential of Dubsado's new payment solution.
+              To increase revenue, we planned to launch our own payment processor. However, user complaints about the existing invoice builder&apos;s inefficiency posed a potential obstacle to adoption. I led the complete redesign to streamline the invoice creation process and maximize the revenue potential of Dubsado&apos;s new payment solution.
             </p>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default function InvoiceBuilderProject() {
                   </div>
                   <div className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></span>
-                    <span className="text-gray-300">Information hierarchy doesn't follow users' workflow</span>
+                    <span className="text-gray-300">Information hierarchy doesn&apos;t follow users&apos; workflow</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></span>
@@ -247,7 +247,7 @@ export default function InvoiceBuilderProject() {
             </h2>
             
             <p className="text-lg leading-relaxed text-gray-300 mb-12">
-              Restructured the entire information hierarchy to align with users' natural workflow, moving related tasks together and creating intuitive navigation paths that reduce cognitive load and improve task completion rates.
+              Restructured the entire information hierarchy to align with users&apos; natural workflow, moving related tasks together and creating intuitive navigation paths that reduce cognitive load and improve task completion rates.
             </p>
             
             {/* Before/After Images */}
@@ -396,7 +396,7 @@ export default function InvoiceBuilderProject() {
             </h2>
             
             <p className="text-lg leading-relaxed text-gray-300 mb-8">
-              The redesigned invoice builder launched in Q2 2024, successfully supporting Dubsado's payment processor rollout. The improvements led to <span className="text-white font-semibold">40% faster invoice creation</span>, <span className="text-white font-semibold">85% reduction in user errors</span>, and positioned the platform for <span className="text-white font-semibold">$100K+ monthly revenue growth</span> from payment processing fees.
+              The redesigned invoice builder launched in Q2 2024, successfully supporting Dubsado&apos;s payment processor rollout. The improvements led to <span className="text-white font-semibold">40% faster invoice creation</span>, <span className="text-white font-semibold">85% reduction in user errors</span>, and positioned the platform for <span className="text-white font-semibold">$100K+ monthly revenue growth</span> from payment processing fees.
             </p>
 
             {/* Achievement Stats */}
@@ -424,7 +424,7 @@ export default function InvoiceBuilderProject() {
             </p>
 
             <p className="text-lg leading-relaxed text-gray-300">
-              Most importantly, the improved invoice builder successfully supported the launch of Dubsado's payment processor, with <span className="text-white font-semibold">78% of users adopting the new payment solution</span> within the first quarter, directly contributing to the company's revenue diversification strategy.
+              Most importantly, the improved invoice builder successfully supported the launch of Dubsado&apos;s payment processor, with <span className="text-white font-semibold">78% of users adopting the new payment solution</span> within the first quarter, directly contributing to the company&apos;s revenue diversification strategy.
             </p>
                        </div>
           </div>
