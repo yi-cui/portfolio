@@ -59,7 +59,7 @@ export default function InvoiceBuilderProject() {
               <div className="text-gray-400 text-xs md:text-sm">Monthly transactions processed</div>
             </div>
             <div className="text-left">
-              <div className="text-2xl md:text-3xl font-bold text-white mb-1">4.6/5</div>
+              <div className="text-2xl md:text-3xl font-bold text-white mb-1">4.4/5</div>
               <div className="text-gray-400 text-xs md:text-sm">User satisfaction rating</div>
             </div>
             <div className="text-left">
@@ -96,10 +96,10 @@ export default function InvoiceBuilderProject() {
           </div>
 
           {/* Project Overview */}
-          <div className="max-w-4xl">
+          <div className="max-w-6xl">
             <h3 className="text-lg font-bold mb-4 text-gray-300">PROJECT OVERVIEW</h3>
             <p className="text-xl leading-relaxed text-gray-300 mb-6">
-              Dubsado is a CRM platform that empowers small businesses with streamlined workflows and efficient payment processes, handling over <span className="text-white font-semibold">$100 million</span> in transactions monthly across <span className="text-white font-semibold">50,000+ active users</span>.
+              Dubsado is a CRM platform that empowers small businesses with streamlined workflows and efficient payment processes, handling over <span className="text-white font-semibold">$100 million</span> in transactions monthly across <span className="text-white font-semibold">30,000+ active users</span>.
             </p>
             <p className="text-xl leading-relaxed text-gray-300">
               To increase revenue, we planned to launch our own payment processor. However, user complaints about the existing invoice builder&apos;s inefficiency posed a potential obstacle to adoption. I led the complete redesign to streamline the invoice creation process and maximize the revenue potential of Dubsado&apos;s new payment solution.
@@ -116,10 +116,6 @@ export default function InvoiceBuilderProject() {
               <span className="text-red-500">📍</span>
               Problem
             </h2>
-            
-            <p className="text-lg leading-relaxed text-gray-300 mb-8">
-              The B2B invoice management market is valued at <span className="text-white font-semibold">$3.8 billion</span> and growing at <span className="text-white font-semibold">12.4% CAGR</span>. Small businesses process millions of invoices annually, yet most struggle with inefficient, time-consuming creation processes.
-            </p>
 
             <div className="space-y-8 mb-12">
               <div>
@@ -250,13 +246,13 @@ export default function InvoiceBuilderProject() {
             </p>
             
             {/* Before/After Images */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+            <div className="space-y-8 mb-12">
               <div className="rounded-lg overflow-hidden bg-gray-900/50">
                 <Image 
                   src="/invoice-before.png" 
                   alt="Invoice Builder - Before Redesign" 
-                  width={600}
-                  height={400}
+                  width={1200}
+                  height={800}
                   className="w-full h-auto object-cover"
                 />
                 <div className="p-4">
@@ -268,8 +264,8 @@ export default function InvoiceBuilderProject() {
                 <Image 
                   src="/invoice-after.png" 
                   alt="Invoice Builder - After Redesign" 
-                  width={600}
-                  height={400}
+                  width={1200}
+                  height={800}
                   className="w-full h-auto object-cover"
                 />
                 <div className="p-4">
@@ -314,8 +310,47 @@ export default function InvoiceBuilderProject() {
               Phase 2 Interactive Table Redesign
             </h2>
             
+            <div className="mb-12">
+              <h3 className="text-xl font-bold mb-4 text-white flex items-center gap-2">
+                <span className="text-red-500">📍</span>
+                Problem
+              </h3>
+              <p className="text-lg leading-relaxed text-gray-300 mb-6">
+                The interaction with the item table is so tedious, and presented several usability issues:
+              </p>
+              
+              <div className="bg-gray-900/30 border border-gray-800 rounded-lg p-6 mb-8">
+                <h4 className="font-bold text-white mb-4">There were three key problems identified when editing the invoices:</h4>
+                <ul className="space-y-3 text-gray-300">
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-500 font-bold flex-shrink-0">•</span>
+                    <span>Users need to scroll up and down when editing the invoice.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-500 font-bold flex-shrink-0">•</span>
+                    <span>The edit and view modes look too different, increasing cognitive load.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-500 font-bold flex-shrink-0">•</span>
+                    <span>Users constantly misclick the &apos;remove&apos; button when trying to edit.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Table Before GIF */}
+              <div className="mb-8">
+                <Image 
+                  src="/table-before.gif" 
+                  alt="Invoice Table Interaction - Before Redesign" 
+                  width={1200}
+                  height={800}
+                  className="w-full rounded-lg shadow-lg"
+                />
+              </div>
+            </div>
+            
             <p className="text-lg leading-relaxed text-gray-300 mb-6">
-              Explored <span className="text-white font-semibold">three design approaches</span> to solve the tedious item table interaction problem:
+              To address these issues, I explored <span className="text-white font-semibold">three design approaches</span>:
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -376,7 +411,7 @@ export default function InvoiceBuilderProject() {
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-purple-500 font-bold flex-shrink-0">•</span>
-                    <span>4.6/5 rating for new line item interaction</span>
+                    <span>4.4/5 rating for new line item interaction</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-purple-500 font-bold flex-shrink-0">•</span>
@@ -403,7 +438,7 @@ export default function InvoiceBuilderProject() {
             {/* Achievement Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
               <div className="text-center">
-                <div className="text-4xl font-bold text-white mb-2">4.6/5</div>
+                <div className="text-4xl font-bold text-white mb-2">4.4/5</div>
                 <div className="text-gray-400 text-sm">User Satisfaction</div>
               </div>
               <div className="text-center">
@@ -421,7 +456,7 @@ export default function InvoiceBuilderProject() {
             </div>
 
             <p className="text-lg leading-relaxed text-gray-300 mb-6">
-              Post-launch metrics showed significant improvements in user engagement and task completion rates. The streamlined workflow reduced average invoice creation time from <span className="text-white font-semibold">15-20 minutes to 8-10 minutes</span>, while user satisfaction scores increased from 3.2/5 to 4.6/5.
+              Post-launch metrics showed significant improvements in user engagement and task completion rates. The streamlined workflow reduced average invoice creation time from <span className="text-white font-semibold">15-20 minutes to 8-10 minutes</span>, while user satisfaction scores increased from 3.2/5 to 4.4/5.
             </p>
 
             <p className="text-lg leading-relaxed text-gray-300">
