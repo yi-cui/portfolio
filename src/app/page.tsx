@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { MessageCircle, ArrowUpRight, Send, ChevronDown, ChevronUp } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface Message {
   id: string
@@ -38,25 +39,30 @@ export default function Portfolio() {
   const projects = [
     {
       id: 1,
-      title: "NEXUS",
-      category: "E-COMMERCE PLATFORM",
-      year: "2024",
-      impact: "+40% CVR"
+      title: "SORCARA COPILOT",
+      category: "AI PLATFORM",
+      year: "2025",
+      impact: "50+ BRANDS",
+      href: "/projects/sorcara-copilot",
+      preview: "/copilot-overview.png"
     },
     {
       id: 2,
-      title: "NEURAL",
-      category: "B2B SAAS PRODUCT",
-      year: "2023",
-      impact: "500K+ USERS"
-    },
-    {
-      id: 3,
-      title: "FLUX",
-      category: "BRAND SYSTEM",
-      year: "2023",
-      impact: "GLOBAL LAUNCH"
+      title: "INVOICE BUILDER REDESIGN",
+      category: "INVOICE BUILDER",
+      year: "2024",
+      impact: "+40% EFFICIENCY",
+      href: "/projects/invoice-builder",
+      preview: "/invoice-builder.png"
     }
+    // Third project hidden for now
+    // {
+    //   id: 3,
+    //   title: "FLUX",
+    //   category: "BRAND SYSTEM",
+    //   year: "2023",
+    //   impact: "GLOBAL LAUNCH"
+    // }
   ]
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -139,7 +145,7 @@ export default function Portfolio() {
                   PRODUCT DESIGNER
                 </h2>
                 <div className="text-lg font-medium text-gray-500">
-                  5Y+ / SF
+                  3+ yoe / SF
                 </div>
               </div>
 
@@ -155,7 +161,7 @@ export default function Portfolio() {
               <div className="flex items-center gap-4 mb-12">
                 <h3 className="text-2xl font-bold">SELECTED WORK</h3>
                 <div className="flex-1 h-px bg-gray-800"></div>
-                <span className="text-gray-500 font-medium">03</span>
+                <span className="text-gray-500 font-medium">02</span>
               </div>
 
               <div className="space-y-10">
@@ -167,54 +173,59 @@ export default function Portfolio() {
                     transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
                     className="group cursor-pointer"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-4">
-                        <span className="text-xs font-bold text-gray-500">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <h4 className="text-2xl font-bold group-hover:text-gray-300 transition-colors duration-300">
-                          {project.title}
-                        </h4>
+                    <Link href={project.href || "#"} className="block">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-4">
+                          <span className="text-xs font-bold text-gray-500">
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <h4 className="text-2xl font-bold group-hover:text-gray-300 transition-colors duration-300">
+                            {project.title}
+                          </h4>
+                        </div>
+                        <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                       </div>
-                      <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
-                    </div>
-                    
-                    <div className="flex items-center gap-6 ml-8">
-                      <span className="text-gray-400 text-xs font-medium tracking-wider">
-                        {project.category}
-                      </span>
-                      <span className="text-gray-600 text-xs">
-                        {project.year}
-                      </span>
-                      <span className="text-white text-xs font-medium">
-                        {project.impact}
-                      </span>
-                    </div>
+                      
+                      <div className="flex items-center gap-6 ml-8 mb-4">
+                        <span className="text-gray-400 text-xs font-medium tracking-wider">
+                          {project.category}
+                        </span>
+                        <span className="text-gray-600 text-xs">
+                          {project.year}
+                        </span>
+                        <span className="text-white text-xs font-medium">
+                          {project.impact}
+                        </span>
+                      </div>
 
-                    <div className="h-px bg-gray-900 mt-4 group-hover:bg-gray-700 transition-colors duration-300"></div>
+                      {/* Preview Image */}
+                      <div className="mb-4 ml-8 rounded-lg overflow-hidden bg-gray-900/50">
+                        <img 
+                          src={project.preview} 
+                          alt={`${project.title} Preview`}
+                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+
+                      <div className="h-px bg-gray-900 mt-4 group-hover:bg-gray-700 transition-colors duration-300"></div>
+                    </Link>
                   </motion.div>
                 ))}
               </div>
             </div>
 
             {/* Desktop Footer */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="pt-16 border-t border-gray-800"
-            >
-              <div className="space-y-8">
+                          <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="pt-8"
+              >
                 <div>
                   <h4 className="text-3xl font-bold mb-2">LET&apos;S WORK</h4>
-                  <p className="text-gray-400 text-xl">hello@yourname.com</p>
+                  <p className="text-gray-400 text-xl">ycui0801@gmail.com</p>
                 </div>
-                <div>
-                  <div className="text-gray-500 mb-2">CURRENTLY</div>
-                  <div className="text-2xl font-bold">SAN FRANCISCO</div>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
           </motion.div>
 
           {/* Desktop Chat Column */}
@@ -385,18 +396,29 @@ export default function Portfolio() {
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                       className="group cursor-pointer p-3 rounded-lg border border-gray-800 hover:border-gray-700 transition-colors bg-gray-900/50"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-base font-bold group-hover:text-gray-300 transition-colors">
-                          {project.title}
-                        </h4>
-                        <ArrowUpRight className="w-4 h-4 text-gray-500 group-hover:text-white transition-colors" />
-                      </div>
-                      
-                      <div className="flex items-center gap-4 text-xs text-gray-400">
-                        <span className="font-medium">{project.category}</span>
-                        <span>{project.year}</span>
-                        <span className="text-white font-medium">{project.impact}</span>
-                      </div>
+                      <Link href={project.href || "#"} className="block">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-base font-bold group-hover:text-gray-300 transition-colors">
+                            {project.title}
+                          </h4>
+                          <ArrowUpRight className="w-4 h-4 text-gray-500 group-hover:text-white transition-colors" />
+                        </div>
+                        
+                        <div className="flex items-center gap-4 text-xs text-gray-400 mb-3">
+                          <span className="font-medium">{project.category}</span>
+                          <span>{project.year}</span>
+                          <span className="text-white font-medium">{project.impact}</span>
+                        </div>
+
+                        {/* Preview Image */}
+                        <div className="mb-3 rounded-lg overflow-hidden bg-gray-900/50">
+                          <img 
+                            src={project.preview} 
+                            alt={`${project.title} Preview`}
+                            className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      </Link>
                     </motion.div>
                   ))}
                 </div>
