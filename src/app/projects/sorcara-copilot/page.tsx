@@ -3,6 +3,7 @@
 import React from 'react'
 import { ArrowLeft, ArrowUpRight, Calendar, Users, Target } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 
 export default function ServiceCapitalProject() {
@@ -26,17 +27,12 @@ export default function ServiceCapitalProject() {
           {/* Company Logo/Name */}
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 flex items-center justify-center rounded">
-              <img 
+              <Image 
                 src="/sorcara-logo.png" 
                 alt="Sorcara Logo" 
                 width={32}
                 height={32}
                 className="w-8 h-8 object-contain"
-                onError={(e) => {
-                  console.error('Logo failed to load:', e);
-                  e.currentTarget.style.display = 'none';
-                }}
-                onLoad={() => console.log('Logo loaded successfully')}
               />
             </div>
             <span className="text-gray-400 text-sm font-medium">SORCARA</span>
@@ -49,9 +45,11 @@ export default function ServiceCapitalProject() {
           {/* Hero Image */}
           <div className="mb-20">
             <div className="rounded-lg overflow-hidden bg-gray-900/50">
-              <img 
+              <Image 
                 src="/copilot-overview.png" 
                 alt="Sorcara Copilot Hero Image" 
+                width={1200}
+                height={800}
                 className="w-full h-auto object-cover"
               />
             </div>
@@ -158,9 +156,11 @@ export default function ServiceCapitalProject() {
         {/* Challenge Image */}
         <div className="mb-20">
           <div className="rounded-lg overflow-hidden bg-gray-900/50">
-            <img 
+            <Image 
               src="/challenge-overview.png" 
               alt="Sourcing Challenges Overview" 
+              width={1200}
+              height={800}
               className="w-full h-auto object-cover"
             />
           </div>
@@ -244,16 +244,20 @@ export default function ServiceCapitalProject() {
             {/* RFQ Interface Images */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
               <div className="rounded-lg overflow-hidden bg-gray-900/50">
-                <img 
+                <Image 
                   src="/rfq-step1.png" 
                   alt="RFQ Step 1 - Basic Information" 
+                  width={600}
+                  height={400}
                   className="w-full h-auto object-cover"
                 />
               </div>
               <div className="rounded-lg overflow-hidden bg-gray-900/50">
-                <img 
+                <Image 
                   src="/rfq-step2.png" 
                   alt="RFQ Step 2 - Product Specification" 
+                  width={600}
+                  height={400}
                   className="w-full h-auto object-cover"
                 />
               </div>
@@ -334,14 +338,12 @@ export default function ServiceCapitalProject() {
 
             {/* Phase 2 Architecture Image */}
             <div className="mb-8">
-              <img 
+              <Image 
                 src="/corefeature.png" 
                 alt="Sorcara Copilot Architecture Overview" 
+                width={1200}
+                height={800}
                 className="w-full rounded-lg shadow-lg"
-                onError={(e) => {
-                  console.error('Failed to load image:', e);
-                  e.currentTarget.style.display = 'none';
-                }}
               />
             </div>
 
@@ -394,14 +396,12 @@ export default function ServiceCapitalProject() {
 
               {/* Use Cases Image */}
               <div className="mb-12">
-                <img 
+                <Image 
                   src="/use-cases.png" 
                   alt="Sorcara Copilot Key Use Cases" 
+                  width={1200}
+                  height={800}
                   className="w-full rounded-lg shadow-lg"
-                  onError={(e) => {
-                    console.error('Failed to load image:', e);
-                    e.currentTarget.style.display = 'none';
-                  }}
                 />
               </div>
 
@@ -414,14 +414,12 @@ export default function ServiceCapitalProject() {
                   </p>
                 </div>
                 <div className="mb-6">
-                  <img 
+                  <Image 
                     src="/white-label.png" 
                     alt="White Label Products Example" 
+                    width={1200}
+                    height={800}
                     className="w-full rounded-lg shadow-lg"
-                    onError={(e) => {
-                      console.error('Failed to load image:', e);
-                      e.currentTarget.style.display = 'none';
-                    }}
                   />
                 </div>
               </div>
@@ -435,14 +433,12 @@ export default function ServiceCapitalProject() {
                   </p>
                 </div>
                 <div className="mb-6">
-                  <img 
+                  <Image 
                     src="/customizable-products.png" 
                     alt="Customizable Products Example" 
+                    width={1200}
+                    height={800}
                     className="w-full rounded-lg shadow-lg"
-                    onError={(e) => {
-                      console.error('Failed to load image:', e);
-                      e.currentTarget.style.display = 'none';
-                    }}
                   />
                 </div>
               </div>
@@ -461,14 +457,12 @@ export default function ServiceCapitalProject() {
                   </ul>
                 </div>
                 <div className="mb-6">
-                  <img 
+                  <Image 
                     src="/research-consultation.png" 
                     alt="Research & Consultation Example" 
+                    width={1200}
+                    height={800}
                     className="w-full rounded-lg shadow-lg"
-                    onError={(e) => {
-                      console.error('Failed to load image:', e);
-                      e.currentTarget.style.display = 'none';
-                    }}
                   />
                 </div>
               </div>
@@ -509,7 +503,7 @@ export default function ServiceCapitalProject() {
             </div>
 
             <p className="text-lg leading-relaxed text-gray-300 mb-6">
-              To further validate Sorcara MVP's capabilities, we conducted a 2-hour evaluation session with 15 customers, comparing our agent to competitors like <span className="text-green-400 font-semibold">Accio (Alibaba's buyer agent)</span> and <span className="text-green-400 font-semibold">Shopping with Perplexity AI</span>. This evaluation encompassed a wide range of tasks, including: query understanding, product and supplier discovery, research and analysis, and document / negotiation generation.
+              To further validate Sorcara MVP&apos;s capabilities, we conducted a 2-hour evaluation session with 15 customers, comparing our agent to competitors like <span className="text-green-400 font-semibold">Accio (Alibaba&apos;s buyer agent)</span> and <span className="text-green-400 font-semibold">Shopping with Perplexity AI</span>. This evaluation encompassed a wide range of tasks, including: query understanding, product and supplier discovery, research and analysis, and document / negotiation generation.
             </p>
 
             <p className="text-lg leading-relaxed text-gray-300">

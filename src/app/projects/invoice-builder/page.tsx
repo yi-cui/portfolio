@@ -3,6 +3,7 @@
 import React from 'react'
 import { ArrowLeft, ArrowUpRight, Calendar, Users, Target } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function InvoiceBuilderProject() {
   return (
@@ -24,14 +25,12 @@ export default function InvoiceBuilderProject() {
         <div className="mb-16">
           {/* Company Logo/Name */}
           <div className="flex items-center gap-3 mb-6">
-            <img 
+            <Image 
               src="/dubsado-logo.png" 
               alt="Dubsado Logo" 
+              width={32}
+              height={32}
               className="w-8 h-8 object-contain"
-              onError={(e) => {
-                console.error('Failed to load Dubsado logo:', e);
-                e.currentTarget.style.display = 'none';
-              }}
             />
             <span className="text-gray-400 text-sm font-medium">DUBSADO</span>
           </div>
@@ -43,9 +42,11 @@ export default function InvoiceBuilderProject() {
           {/* Hero Image */}
           <div className="mb-20">
             <div className="rounded-lg overflow-hidden bg-gray-900/50">
-              <img 
+              <Image 
                 src="/invoice-builder.png" 
                 alt="Invoice Builder Redesign Hero Image" 
+                width={1200}
+                height={800}
                 className="w-full h-auto object-cover"
               />
             </div>
@@ -162,14 +163,12 @@ export default function InvoiceBuilderProject() {
 
             {/* Challenge Image */}
             <div className="mb-8">
-              <img 
+              <Image 
                 src="/invoice-challenge.png" 
                 alt="Invoice Builder Challenge Overview" 
+                width={1200}
+                height={800}
                 className="w-full rounded-lg shadow-lg"
-                onError={(e) => {
-                  console.error('Failed to load image:', e);
-                  e.currentTarget.style.display = 'none';
-                }}
               />
             </div>
           </div>
@@ -253,9 +252,11 @@ export default function InvoiceBuilderProject() {
             {/* Before/After Images */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
               <div className="rounded-lg overflow-hidden bg-gray-900/50">
-                <img 
+                <Image 
                   src="/invoice-before.png" 
                   alt="Invoice Builder - Before Redesign" 
+                  width={600}
+                  height={400}
                   className="w-full h-auto object-cover"
                 />
                 <div className="p-4">
@@ -264,9 +265,11 @@ export default function InvoiceBuilderProject() {
                 </div>
               </div>
               <div className="rounded-lg overflow-hidden bg-gray-900/50">
-                <img 
+                <Image 
                   src="/invoice-after.png" 
                   alt="Invoice Builder - After Redesign" 
+                  width={600}
+                  height={400}
                   className="w-full h-auto object-cover"
                 />
                 <div className="p-4">
@@ -337,14 +340,12 @@ export default function InvoiceBuilderProject() {
 
             {/* Table Interaction Demo */}
             <div className="mb-8">
-              <img 
+              <Image 
                 src="/invoice-table-interaction.png" 
                 alt="Invoice Table Interaction Design" 
+                width={1200}
+                height={800}
                 className="w-full rounded-lg shadow-lg"
-                onError={(e) => {
-                  console.error('Failed to load image:', e);
-                  e.currentTarget.style.display = 'none';
-                }}
               />
             </div>
 
