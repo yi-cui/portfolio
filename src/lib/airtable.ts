@@ -1,8 +1,5 @@
 import Airtable from 'airtable'
 
-// Initialize Airtable
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID!)
-
 interface ChatLogData {
   userMessage: string
   aiResponse: string
@@ -18,6 +15,8 @@ export async function logToAirtable(data: ChatLogData) {
   }
 
   try {
+    // Initialize Airtable at runtime, not build time
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID!)
     const table = base(process.env.AIRTABLE_TABLE_NAME || 'Chat Conversations')
     
     const record = await table.create({
