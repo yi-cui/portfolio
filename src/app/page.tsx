@@ -80,9 +80,24 @@ export default function Portfolio() {
   const [showProjects, setShowProjects] = useState(false)
   const [hasInteracted, setHasInteracted] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const desktopMessagesRef = useRef<HTMLDivElement>(null)
+  const mobileMessagesRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    setTimeout(() => {
+      // Scroll desktop container
+      if (desktopMessagesRef.current) {
+        desktopMessagesRef.current.scrollTop = desktopMessagesRef.current.scrollHeight
+      }
+      
+      // Scroll mobile container  
+      if (mobileMessagesRef.current) {
+        mobileMessagesRef.current.scrollTop = mobileMessagesRef.current.scrollHeight
+      }
+      
+      // Fallback to scrollIntoView
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }, 100)
   }
 
   useEffect(() => {
@@ -157,6 +172,11 @@ export default function Portfolio() {
     setMessages(prev => [...prev, userMessage])
     setInputMessage('')
     setIsLoading(true)
+    
+    // Scroll to show user message immediately
+    setTimeout(() => {
+      scrollToBottom()
+    }, 50)
 
     try {
       const response = await fetch('/api/chat', {
@@ -184,6 +204,11 @@ export default function Portfolio() {
       }
       
       setMessages(prev => [...prev, aiResponse])
+      
+      // Force scroll to bottom for AI response
+      setTimeout(() => {
+        scrollToBottom()
+      }, 200)
       
       // Track successful AI response
       trackEvent('chat_ai_response_received', {
@@ -389,7 +414,7 @@ export default function Portfolio() {
               </div>
 
               {/* Desktop Messages */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              <div ref={desktopMessagesRef} className="flex-1 overflow-y-auto p-6 space-y-6">
                 <AnimatePresence>
                   {messages.map((message) => (
                     <motion.div
@@ -559,6 +584,7 @@ export default function Portfolio() {
 
         {/* Messages - Scrollable with Fixed Header/Footer Space */}
         <div 
+          ref={mobileMessagesRef}
           className="fixed top-0 left-0 right-0 bottom-0 overflow-y-auto p-3 space-y-4"
           style={{ 
             paddingTop: showProjects ? '280px' : '120px', 

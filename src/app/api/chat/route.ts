@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { logToAirtable } from '../../../lib/airtable'
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -8,7 +9,7 @@ const openai = new OpenAI({
 
 // Portfolio context - Yi Cui's information
 const PORTFOLIO_CONTEXT = `
-You are an AI assistant representing Yi Cui, a product designer with 5+ years of experience based in San Francisco. 
+You are an AI assistant representing Yi Cui, a product designer with 3+ years of experience based in San Francisco. 
 Here's information about them:
 
 BACKGROUND:
@@ -44,7 +45,7 @@ CAREER STATUS:
 - Currently available for new opportunities
 - Looking for senior product designer or design lead roles
 - Interested in working with innovative companies that value design
-- Contact: hello@yourname.com
+- Contact: ycui0801@gmail.com
 
 Answer questions about their work, experience, design process, or career in a helpful and professional manner. 
 Be conversational but knowledgeable. Speak as if you are Yi Cui or representing them directly.
@@ -57,6 +58,31 @@ const logEvent = (eventName: string, properties?: Record<string, string | number
     timestamp: new Date().toISOString(),
     ...properties
   })
+}
+
+// Toggle this to true for testing without OpenAI API
+const MOCK_MODE = false
+
+const getMockResponse = (message: string): string => {
+  const responses = [
+    "That's a great question! Yi has extensive experience in product design, focusing on creating intuitive user experiences.",
+    "Yi specializes in minimalist design principles that maximize impact. Their portfolio showcases several award-winning projects.",
+    "Interesting! Yi's design process typically involves user research, rapid prototyping, and iterative testing to ensure optimal usability.",
+    "Yi has worked with Fortune 500 companies and startups alike, bringing fresh perspectives to complex design challenges.",
+    "Great point! Yi's expertise includes UX/UI design, design systems, and strategic product thinking.",
+    `Regarding "${message}" - Yi would approach this with a user-centered design methodology, ensuring every decision is backed by research and data.`
+  ]
+  
+  // Simple response selection based on message content
+  if (message.toLowerCase().includes('experience') || message.toLowerCase().includes('background')) {
+    return responses[0]
+  } else if (message.toLowerCase().includes('design') || message.toLowerCase().includes('process')) {
+    return responses[2]
+  } else if (message.toLowerCase().includes('project') || message.toLowerCase().includes('work')) {
+    return responses[1]
+  } else {
+    return responses[Math.floor(Math.random() * responses.length)]
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -73,10 +99,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Log incoming request
+    // Log incoming request with content
     const logData: Record<string, string | number | boolean> = {
       messageLength: message.length,
-      conversationLength: previousMessages?.length || 0
+      conversationLength: previousMessages?.length || 0,
+      userMessage: message // Add actual message content
     }
     
     const userAgent = request.headers.get('user-agent')
@@ -87,57 +114,84 @@ export async function POST(request: NextRequest) {
     
     logEvent('chat_api_request', logData)
 
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json(
-        { error: 'OpenAI API key not configured' },
-        { status: 500 }
-      )
-    }
+    let aiResponse: string
+    let tokensUsed: number | undefined
 
-    // Build conversation history with proper typing
-    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
-      {
-        role: "system",
-        content: PORTFOLIO_CONTEXT
+    if (MOCK_MODE) {
+      // Mock mode - simulate AI response without OpenAI API
+      console.log('🤖 MOCK MODE: Generating mock response...')
+      
+      // Simulate API delay for realistic testing
+      await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200))
+      
+      aiResponse = getMockResponse(message)
+      tokensUsed = Math.floor(Math.random() * 200) + 100 // Mock token count
+      
+    } else {
+      // Real OpenAI API mode
+      if (!process.env.OPENAI_API_KEY) {
+        return NextResponse.json(
+          { error: 'OpenAI API key not configured' },
+          { status: 500 }
+        )
       }
-    ]
 
-    // Add previous messages for context
-    if (previousMessages && Array.isArray(previousMessages)) {
-      previousMessages.slice(-5).forEach((msg: { isUser: boolean; content: string }) => { // Keep only last 5 messages for context
-        messages.push({
-          role: msg.isUser ? "user" : "assistant",
-          content: msg.content
+      // Build conversation history with proper typing
+      const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+        {
+          role: "system",
+          content: PORTFOLIO_CONTEXT
+        }
+      ]
+
+      // Add previous messages for context
+      if (previousMessages && Array.isArray(previousMessages)) {
+        previousMessages.slice(-5).forEach((msg: { isUser: boolean; content: string }) => { // Keep only last 5 messages for context
+          messages.push({
+            role: msg.isUser ? "user" : "assistant",
+            content: msg.content
+          })
         })
+      }
+
+      // Add current message
+      messages.push({
+        role: "user",
+        content: message
       })
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: messages,
+        max_tokens: 300,
+        temperature: 0.7,
+      })
+
+      aiResponse = completion.choices[0]?.message?.content || "I'm sorry, I couldn't process that request."
+      tokensUsed = completion.usage?.total_tokens
     }
-
-    // Add current message
-    messages.push({
-      role: "user",
-      content: message
-    })
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: messages,
-      max_tokens: 300,
-      temperature: 0.7,
-    })
-
-    const aiResponse = completion.choices[0]?.message?.content || "I'm sorry, I couldn't process that request."
 
     // Log successful response
     const successData: Record<string, string | number | boolean> = {
       responseLength: aiResponse.length,
-      processingTime: Date.now() - startTime
+      processingTime: Date.now() - startTime,
+      aiResponse: aiResponse // Add actual AI response content
     }
     
-    if (completion.usage?.total_tokens !== undefined) {
-      successData.tokensUsed = completion.usage.total_tokens
+    if (tokensUsed !== undefined) {
+      successData.tokensUsed = tokensUsed
     }
     
     logEvent('chat_api_success', successData)
+    
+    // Log complete conversation to Airtable
+    await logToAirtable({
+      userMessage: message,
+      aiResponse: aiResponse,
+      messageLength: message.length,
+      responseTime: Date.now() - startTime,
+      tokensUsed: tokensUsed
+    })
 
     return NextResponse.json({ message: aiResponse })
 
