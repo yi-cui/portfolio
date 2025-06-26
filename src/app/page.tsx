@@ -9,7 +9,7 @@ import Link from 'next/link'
 // Extend Window interface for gtag
 declare global {
   interface Window {
-    gtag: (command: string, targetId: string, config?: Record<string, any>) => void
+    gtag: (command: string, targetId: string, config?: Record<string, string | number | boolean>) => void
   }
 }
 
@@ -21,7 +21,7 @@ interface Message {
 }
 
 // Simple tracking utility
-const trackEvent = (eventName: string, properties?: Record<string, any>) => {
+const trackEvent = (eventName: string, properties?: Record<string, string | number | boolean>) => {
   // Log to console for debugging
   console.log(`[CHAT TRACKING] ${eventName}:`, properties)
   
@@ -37,14 +37,23 @@ const trackEvent = (eventName: string, properties?: Record<string, any>) => {
   
   // Send to Google Analytics 4
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, {
+    const eventParams: Record<string, string | number | boolean> = {
       event_category: 'chat_interaction',
       event_label: properties?.sessionId || getSessionId(),
-      custom_parameter_1: properties?.messageLength,
-      custom_parameter_2: properties?.conversationLength,
-      custom_parameter_3: properties?.messageCount,
       value: properties?.messageLength || 1
-    })
+    }
+    
+    if (properties?.messageLength !== undefined) {
+      eventParams.custom_parameter_1 = properties.messageLength
+    }
+    if (properties?.conversationLength !== undefined) {
+      eventParams.custom_parameter_2 = properties.conversationLength
+    }
+    if (properties?.messageCount !== undefined) {
+      eventParams.custom_parameter_3 = properties.messageCount
+    }
+    
+    window.gtag('event', eventName, eventParams)
   }
 }
 

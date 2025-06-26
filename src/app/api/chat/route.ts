@@ -52,7 +52,7 @@ If asked about specific project details, focus on the design process, challenges
 `
 
 // Simple server-side logging utility
-const logEvent = (eventName: string, properties?: Record<string, any>) => {
+const logEvent = (eventName: string, properties?: Record<string, string | number | boolean>) => {
   console.log(`[CHAT API] ${eventName}:`, {
     timestamp: new Date().toISOString(),
     ...properties
@@ -74,12 +74,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Log incoming request
-    logEvent('chat_api_request', {
+    const logData: Record<string, string | number | boolean> = {
       messageLength: message.length,
-      conversationLength: previousMessages?.length || 0,
-      userAgent: request.headers.get('user-agent'),
-      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip')
-    })
+      conversationLength: previousMessages?.length || 0
+    }
+    
+    const userAgent = request.headers.get('user-agent')
+    if (userAgent) logData.userAgent = userAgent
+    
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip')
+    if (ip) logData.ip = ip
+    
+    logEvent('chat_api_request', logData)
 
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json(
@@ -122,11 +128,16 @@ export async function POST(request: NextRequest) {
     const aiResponse = completion.choices[0]?.message?.content || "I'm sorry, I couldn't process that request."
 
     // Log successful response
-    logEvent('chat_api_success', {
+    const successData: Record<string, string | number | boolean> = {
       responseLength: aiResponse.length,
-      processingTime: Date.now() - startTime,
-      tokensUsed: completion.usage?.total_tokens
-    })
+      processingTime: Date.now() - startTime
+    }
+    
+    if (completion.usage?.total_tokens !== undefined) {
+      successData.tokensUsed = completion.usage.total_tokens
+    }
+    
+    logEvent('chat_api_success', successData)
 
     return NextResponse.json({ message: aiResponse })
 

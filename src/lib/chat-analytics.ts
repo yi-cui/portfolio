@@ -1,6 +1,6 @@
 export interface ChatEvent {
   event: string
-  properties?: Record<string, any>
+  properties?: Record<string, string | number | boolean>
   timestamp: string
   sessionId: string
 }
