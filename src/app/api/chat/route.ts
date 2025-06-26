@@ -51,16 +51,35 @@ Be conversational but knowledgeable. Speak as if you are Yi Cui or representing 
 If asked about specific project details, focus on the design process, challenges solved, and impact achieved.
 `
 
+// Simple server-side logging utility
+const logEvent = (eventName: string, properties?: Record<string, any>) => {
+  console.log(`[CHAT API] ${eventName}:`, {
+    timestamp: new Date().toISOString(),
+    ...properties
+  })
+}
+
 export async function POST(request: NextRequest) {
+  const startTime = Date.now()
+  
   try {
     const { message, previousMessages } = await request.json()
 
     if (!message) {
+      logEvent('chat_api_error', { error: 'Message is required' })
       return NextResponse.json(
         { error: 'Message is required' },
         { status: 400 }
       )
     }
+
+    // Log incoming request
+    logEvent('chat_api_request', {
+      messageLength: message.length,
+      conversationLength: previousMessages?.length || 0,
+      userAgent: request.headers.get('user-agent'),
+      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip')
+    })
 
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json(
@@ -102,10 +121,24 @@ export async function POST(request: NextRequest) {
 
     const aiResponse = completion.choices[0]?.message?.content || "I'm sorry, I couldn't process that request."
 
+    // Log successful response
+    logEvent('chat_api_success', {
+      responseLength: aiResponse.length,
+      processingTime: Date.now() - startTime,
+      tokensUsed: completion.usage?.total_tokens
+    })
+
     return NextResponse.json({ message: aiResponse })
 
   } catch (error) {
     console.error('OpenAI API error:', error)
+    
+    // Log API errors
+    logEvent('chat_api_error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      processingTime: Date.now() - startTime
+    })
+    
     return NextResponse.json(
       { error: 'Failed to generate response' },
       { status: 500 }

@@ -6,11 +6,55 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 
+// Extend Window interface for gtag
+declare global {
+  interface Window {
+    gtag: (command: string, targetId: string, config?: Record<string, any>) => void
+  }
+}
+
 interface Message {
   id: string
   content: string
   isUser: boolean
   timestamp: Date
+}
+
+// Simple tracking utility
+const trackEvent = (eventName: string, properties?: Record<string, any>) => {
+  // Log to console for debugging
+  console.log(`[CHAT TRACKING] ${eventName}:`, properties)
+  
+  // Store in localStorage for persistence
+  const events = JSON.parse(localStorage.getItem('chatEvents') || '[]')
+  events.push({
+    event: eventName,
+    properties,
+    timestamp: new Date().toISOString(),
+    sessionId: getSessionId()
+  })
+  localStorage.setItem('chatEvents', JSON.stringify(events))
+  
+  // Send to Google Analytics 4
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, {
+      event_category: 'chat_interaction',
+      event_label: properties?.sessionId || getSessionId(),
+      custom_parameter_1: properties?.messageLength,
+      custom_parameter_2: properties?.conversationLength,
+      custom_parameter_3: properties?.messageCount,
+      value: properties?.messageLength || 1
+    })
+  }
+}
+
+const getSessionId = () => {
+  let sessionId = localStorage.getItem('chatSessionId')
+  if (!sessionId) {
+    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    localStorage.setItem('chatSessionId', sessionId)
+  }
+  return sessionId
 }
 
 export default function Portfolio() {
@@ -25,6 +69,7 @@ export default function Portfolio() {
   const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showProjects, setShowProjects] = useState(false)
+  const [hasInteracted, setHasInteracted] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -34,6 +79,14 @@ export default function Portfolio() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Track initial page load and chat visibility
+  useEffect(() => {
+    trackEvent('chat_page_loaded', {
+      userAgent: navigator.userAgent,
+      timestamp: new Date().toISOString()
+    })
+  }, [])
 
   // Minimal project data - fewer but impactful
   const projects = [
@@ -69,6 +122,21 @@ export default function Portfolio() {
     e.preventDefault()
     
     if (!inputMessage.trim() || isLoading) return
+
+    // Track user message
+    if (!hasInteracted) {
+      trackEvent('chat_first_interaction', {
+        messageLength: inputMessage.length,
+        timestamp: new Date().toISOString()
+      })
+      setHasInteracted(true)
+    }
+
+    trackEvent('chat_message_sent', {
+      messageLength: inputMessage.length,
+      messageCount: messages.filter(m => m.isUser).length + 1,
+      timestamp: new Date().toISOString()
+    })
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -107,7 +175,14 @@ export default function Portfolio() {
       }
       
       setMessages(prev => [...prev, aiResponse])
-    } catch {
+      
+      // Track successful AI response
+      trackEvent('chat_ai_response_received', {
+        responseLength: data.message?.length || 0,
+        conversationLength: messages.length + 2,
+        timestamp: new Date().toISOString()
+      })
+    } catch (error) {
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
         content: "System temporarily unavailable.",
@@ -115,6 +190,12 @@ export default function Portfolio() {
         timestamp: new Date()
       }
       setMessages(prev => [...prev, errorResponse])
+      
+      // Track errors
+      trackEvent('chat_error', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      })
     } finally {
       setIsLoading(false)
     }
@@ -228,7 +309,7 @@ export default function Portfolio() {
                   <p className="text-gray-400 text-xl mb-3">ycui0801@gmail.com</p>
                   <div className="flex items-center justify-between">
                     <a 
-                      href="https://drive.google.com/file/d/1HGYczYPueOVSvbDqJZ54py9vFBf_JynT/view?usp=sharing" 
+                      href="/yi-cui-resume.pdf" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-white font-medium hover:text-gray-300 transition-colors text-lg"
@@ -364,6 +445,7 @@ export default function Portfolio() {
                     type="text"
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
+                    onFocus={() => trackEvent('chat_input_focused')}
                     placeholder="Ask about my design process..."
                     className="flex-1 bg-transparent text-sm placeholder-gray-500 focus:outline-none text-white"
                   />
@@ -538,6 +620,7 @@ export default function Portfolio() {
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
+              onFocus={() => trackEvent('chat_input_focused')}
               placeholder="Ask about my design process..."
               className="flex-1 bg-transparent text-sm placeholder-gray-500 focus:outline-none text-white"
             />

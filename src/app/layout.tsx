@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Yi Cui - Product Designer",
@@ -13,14 +13,35 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
   return (
     <html lang="en">
       <head>
         <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet" />
+        {/* Google Analytics */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}', {
+                  page_title: document.title,
+                  page_location: window.location.href,
+                });
+              `}
+            </Script>
+          </>
+        )}
       </head>
       <body className="font-satoshi antialiased">
         {children}
-        <Analytics />
       </body>
     </html>
   );
