@@ -36,24 +36,28 @@ const trackEvent = (eventName: string, properties?: Record<string, string | numb
   localStorage.setItem('chatEvents', JSON.stringify(events))
   
   // Send to Google Analytics 4
-  if (typeof window !== 'undefined' && window.gtag) {
-    const eventParams: Record<string, string | number | boolean> = {
-      event_category: 'chat_interaction',
-      event_label: properties?.sessionId || getSessionId(),
-      value: properties?.messageLength || 1
+  if (typeof window !== 'undefined' && window.gtag && typeof window.gtag === 'function') {
+    try {
+      const eventParams: Record<string, string | number | boolean> = {
+        event_category: 'chat_interaction',
+        event_label: properties?.sessionId || getSessionId(),
+        value: properties?.messageLength || 1
+      }
+      
+      if (properties?.messageLength !== undefined) {
+        eventParams.custom_parameter_1 = properties.messageLength
+      }
+      if (properties?.conversationLength !== undefined) {
+        eventParams.custom_parameter_2 = properties.conversationLength
+      }
+      if (properties?.messageCount !== undefined) {
+        eventParams.custom_parameter_3 = properties.messageCount
+      }
+      
+      window.gtag('event', eventName, eventParams)
+    } catch (error) {
+      console.warn('Google Analytics tracking failed:', error)
     }
-    
-    if (properties?.messageLength !== undefined) {
-      eventParams.custom_parameter_1 = properties.messageLength
-    }
-    if (properties?.conversationLength !== undefined) {
-      eventParams.custom_parameter_2 = properties.conversationLength
-    }
-    if (properties?.messageCount !== undefined) {
-      eventParams.custom_parameter_3 = properties.messageCount
-    }
-    
-    window.gtag('event', eventName, eventParams)
   }
 }
 
@@ -106,10 +110,15 @@ export default function Portfolio() {
 
   // Track initial page load and chat visibility
   useEffect(() => {
-    trackEvent('chat_page_loaded', {
-      userAgent: navigator.userAgent,
-      timestamp: new Date().toISOString()
-    })
+    // Wait a bit for Google Analytics to initialize
+    const timer = setTimeout(() => {
+      trackEvent('chat_page_loaded', {
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString()
+      })
+    }, 1000)
+    
+    return () => clearTimeout(timer)
   }, [])
 
   // Minimal project data - fewer but impactful
@@ -512,7 +521,7 @@ export default function Portfolio() {
               <h1 className="text-xl font-bold">Yi Cui</h1>
               <div className="flex items-center gap-3 text-xs text-gray-400">
                 <span>PRODUCT DESIGNER</span>
-                <span>5Y+ / SF</span>
+                <span>3Y+ / SF</span>
               </div>
             </div>
             
@@ -672,7 +681,7 @@ export default function Portfolio() {
         {/* Hidden Footer - No longer needed */}
         <div className="hidden flex-shrink-0 p-3 border-t border-gray-800 bg-black">
           <div className="flex justify-between items-center text-xs text-gray-400">
-            <span>hello@yourname.com</span>
+            <span>ycui0801@gmail.com</span>
             <span>San Francisco</span>
           </div>
         </div>

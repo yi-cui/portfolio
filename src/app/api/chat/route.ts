@@ -129,43 +129,43 @@ export async function POST(request: NextRequest) {
       
     } else {
       // Real OpenAI API mode
-      if (!process.env.OPENAI_API_KEY) {
-        return NextResponse.json(
-          { error: 'OpenAI API key not configured' },
-          { status: 500 }
-        )
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { error: 'OpenAI API key not configured' },
+        { status: 500 }
+      )
+    }
+
+    // Build conversation history with proper typing
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      {
+        role: "system",
+        content: PORTFOLIO_CONTEXT
       }
+    ]
 
-      // Build conversation history with proper typing
-      const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
-        {
-          role: "system",
-          content: PORTFOLIO_CONTEXT
-        }
-      ]
-
-      // Add previous messages for context
-      if (previousMessages && Array.isArray(previousMessages)) {
-        previousMessages.slice(-5).forEach((msg: { isUser: boolean; content: string }) => { // Keep only last 5 messages for context
-          messages.push({
-            role: msg.isUser ? "user" : "assistant",
-            content: msg.content
-          })
+    // Add previous messages for context
+    if (previousMessages && Array.isArray(previousMessages)) {
+      previousMessages.slice(-5).forEach((msg: { isUser: boolean; content: string }) => { // Keep only last 5 messages for context
+        messages.push({
+          role: msg.isUser ? "user" : "assistant",
+          content: msg.content
         })
-      }
-
-      // Add current message
-      messages.push({
-        role: "user",
-        content: message
       })
+    }
 
-      const completion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: messages,
-        max_tokens: 300,
-        temperature: 0.7,
-      })
+    // Add current message
+    messages.push({
+      role: "user",
+      content: message
+    })
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: messages,
+      max_tokens: 300,
+      temperature: 0.7,
+    })
 
       aiResponse = completion.choices[0]?.message?.content || "I'm sorry, I couldn't process that request."
       tokensUsed = completion.usage?.total_tokens
