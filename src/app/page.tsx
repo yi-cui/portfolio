@@ -83,9 +83,19 @@ export default function Portfolio() {
   const [isLoading, setIsLoading] = useState(false)
   const [showProjects, setShowProjects] = useState(false)
   const [hasInteracted, setHasInteracted] = useState(false)
+  const [showPresetQuestions, setShowPresetQuestions] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const desktopMessagesRef = useRef<HTMLDivElement>(null)
   const mobileMessagesRef = useRef<HTMLDivElement>(null)
+
+  // Preset questions for users to quickly ask
+  const presetQuestions = [
+    "Tell me about your AI experience",
+    "What's your design process?",
+    "How do you approach user research?",
+    "What tools do you use?",
+    "Can you share your experience?",
+  ]
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -121,6 +131,107 @@ export default function Portfolio() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Handle preset question clicks
+  const handlePresetQuestion = async (question: string) => {
+    if (isLoading) return
+
+    // Hide preset questions after first use (they're just guidance)
+    setShowPresetQuestions(false)
+
+    // Track preset question usage
+    trackEvent('chat_preset_question_clicked', {
+      question: question,
+      timestamp: new Date().toISOString()
+    })
+
+    // Track user message
+    if (!hasInteracted) {
+      trackEvent('chat_first_interaction', {
+        messageLength: question.length,
+        timestamp: new Date().toISOString()
+      })
+      setHasInteracted(true)
+    }
+
+    trackEvent('chat_message_sent', {
+      messageLength: question.length,
+      messageCount: messages.filter(m => m.isUser).length + 1,
+      timestamp: new Date().toISOString()
+    })
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: question,
+      isUser: true,
+      timestamp: new Date()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInputMessage('') // Clear the input
+    setIsLoading(true)
+    
+    // Scroll to show user message immediately
+    setTimeout(() => {
+      scrollToBottom()
+    }, 50)
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: question,
+          previousMessages: messages
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to get response')
+      }
+
+      const data = await response.json()
+      
+      const aiResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        content: data.message || "I'd be happy to help! Could you please rephrase your question?",
+        isUser: false,
+        timestamp: new Date()
+      }
+      
+      setMessages(prev => [...prev, aiResponse])
+      
+      // Force scroll to bottom for AI response
+      setTimeout(() => {
+        scrollToBottom()
+      }, 200)
+      
+      // Track successful AI response
+      trackEvent('chat_ai_response_received', {
+        responseLength: data.message?.length || 0,
+        conversationLength: messages.length + 2,
+        timestamp: new Date().toISOString()
+      })
+    } catch (error) {
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        content: "System temporarily unavailable.",
+        isUser: false,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorResponse])
+      
+      // Track errors
+      trackEvent('chat_error', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   // Minimal project data - fewer but impactful
   const projects = [
     {
@@ -128,7 +239,7 @@ export default function Portfolio() {
       title: "SORCARA COPILOT",
       category: "AI PLATFORM",
       year: "2025",
-      impact: "50+ BRANDS",
+      impact: "20+ BRANDS",
       href: "/projects/sorcara-copilot",
       preview: "/copilot-overview.png"
     },
@@ -155,6 +266,9 @@ export default function Portfolio() {
     e.preventDefault()
     
     if (!inputMessage.trim() || isLoading) return
+
+    // Hide preset questions after first manual input (user has learned the interface)
+    setShowPresetQuestions(false)
 
     // Track user message
     if (!hasInteracted) {
@@ -483,6 +597,34 @@ export default function Portfolio() {
 
               {/* Desktop Input */}
               <div className="p-6 flex-shrink-0">
+                {/* Desktop Preset Questions */}
+                <AnimatePresence>
+                  {showPresetQuestions && (
+                                        <motion.div 
+                      className="mb-4"
+                      initial={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="flex flex-wrap gap-2">
+                        {presetQuestions.map((question, index) => (
+                          <motion.button
+                            key={index}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                            onClick={() => handlePresetQuestion(question)}
+                            disabled={isLoading}
+                            className="px-3 py-1.5 text-xs text-gray-300 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-full border border-gray-700 hover:border-gray-600 transition-all duration-200 hover:text-white"
+                          >
+                            {question}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
                 <form onSubmit={handleSendMessage} className="flex items-center gap-3 bg-gray-900 rounded-full px-4 py-3">
                   <input
                     type="text"
@@ -659,6 +801,34 @@ export default function Portfolio() {
 
         {/* Input - Fixed to Bottom */}
         <div className="fixed bottom-4 left-4 right-4 z-10">
+          {/* Mobile Preset Questions */}
+          <AnimatePresence>
+            {showPresetQuestions && (
+              <motion.div 
+                className="mb-3"
+                initial={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {presetQuestions.slice(0, 4).map((question, index) => (
+                    <motion.button
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      onClick={() => handlePresetQuestion(question)}
+                      disabled={isLoading}
+                      className="px-2.5 py-1 text-xs text-gray-300 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-full border border-gray-700 hover:border-gray-600 transition-all duration-200 hover:text-white"
+                    >
+                      {question}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
           <form onSubmit={handleSendMessage} className="flex items-center gap-2 bg-gray-900 rounded-full px-3 py-2 shadow-lg">
             <input
               type="text"
